@@ -15,10 +15,23 @@ namespace eCommerceMVC.Service
                 List<User> tempuser = unitofwork.UserRepository.Get(
                     filter: u => u.UserName == username
                     ).ToList();
-                unitofwork.Dispose();
-                string temppassword = tempuser[0].Password;
-                if (temppassword == password) return true;
-                else return false;
+                if (tempuser.Count != 0)
+                {
+                    unitofwork.Dispose();
+                    string temppassword = tempuser[0].Password;
+                    if (temppassword == password) return true;
+                    else return false;
+                }
+                else {
+                    tempuser = unitofwork.UserRepository.Get(
+                        filter: u => u.Email == username
+                        ).ToList();
+                    if (tempuser.Count == 0) return false;
+                    unitofwork.Dispose();
+                    string temppassword = tempuser[0].Password;
+                    if (temppassword == password) return true;
+                    else return false;
+                }
             }
         }
         public void register(string username, string password, string email) {

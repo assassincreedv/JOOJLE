@@ -15,9 +15,25 @@ namespace eCommerceMVC.Controllers
         // GET: User
         public ActionResult Login()
         {
+            if (Session["error"] == null) ViewData["erroeinfo"] = "Please check login credentials!!";
+            else ViewData["errorinfo"] = "";
+            return View("login");
+        }
+        [HttpPost]
+        public ActionResult LoginUser() {
             UserServicecs user = new UserServicecs();
-            user.Login("Lana", "123123");
-            return View();
+            string username = Request["UserName"].ToString().ToLower();
+            string password = Request["UserPassword"].ToString();
+            if (user.Login(username, password))
+            {
+                Console.WriteLine("FIND !");
+                return View();
+            }
+            else {
+                Console.WriteLine("ERROR !");
+                Session["error"] = 1;
+                return View("Login");
+            }
         }
         public ActionResult Register() {
             UserServicecs user = new UserServicecs();

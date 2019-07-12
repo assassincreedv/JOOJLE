@@ -11,6 +11,7 @@ namespace eCommerceMVC.UoW
     {
         private JooleEntities dbcontext;
         private static UserRepository userrepository;
+        private static ProductRepository productrepository;
         public UnitofWork(JooleEntities dbcontext) {
             this.dbcontext = dbcontext;
         }
@@ -22,6 +23,15 @@ namespace eCommerceMVC.UoW
                     userrepository = new UserRepository(dbcontext);
                 }
                 return userrepository;
+            }
+        }
+        public ProductRepository ProductRepository
+        {
+            get {
+                if (productrepository == null) {
+                    productrepository = new ProductRepository(dbcontext);
+                }
+                return productrepository;
             }
         }
         public void Save() {
